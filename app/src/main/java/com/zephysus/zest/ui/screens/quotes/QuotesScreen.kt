@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -61,7 +60,6 @@ fun QuotesContent(
                         modifier = Modifier
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                             .fillMaxWidth()
-                            .wrapContentWidth()
                             .clickable { },
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
