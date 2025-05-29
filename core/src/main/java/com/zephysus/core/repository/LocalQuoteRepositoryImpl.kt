@@ -26,14 +26,14 @@ class LocalQuoteRepositoryImpl @Inject constructor(
         .transform { quotes -> emit(Either.success(quotes)) }
         .catch { emit(Either.success(emptyList())) }
 
-    override suspend fun addQuote(title: String, quote: String): Either<String> =
+    override suspend fun addQuote(title: String, author: String): Either<String> =
         kotlin.runCatching {
             val tempQuoteId = QuoteRepository.generateTemporaryId()
             quotesDao.addQuote(
                 QuoteEntity(
                     quoteId = tempQuoteId,
                     title = title,
-                    author = quote,
+                    author = author,
                     createdAt = System.currentTimeMillis(),
                 )
             )
@@ -54,9 +54,9 @@ class LocalQuoteRepositoryImpl @Inject constructor(
     override suspend fun updateQuote(
         quoteId: String,
         title: String,
-        quote: String,
+        author: String,
     ): Either<String> = runCatching {
-        quotesDao.updateQuoteById(quoteId, title, quote)
+        quotesDao.updateQuoteById(quoteId, title, author)
         Either.success(quoteId)
     }.getOrDefault(Either.error("Unable to update quote"))
 

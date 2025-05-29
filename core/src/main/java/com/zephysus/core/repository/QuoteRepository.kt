@@ -26,9 +26,9 @@ interface QuoteRepository {
      * Adds a new quote
      *
      * @param title Title of a quote
-     * @param quote Body of a quote
+     * @param author Author of a quote
      */
-    suspend fun addQuote(title: String, quote: String): Either<String>
+    suspend fun addQuote(title: String, author: String): Either<String>
 
     /**
      * Adds a list of quotes. Replaces quotes if already exists
@@ -40,12 +40,12 @@ interface QuoteRepository {
      *
      * @param quoteId The Quote ID
      * @param title Title of a quote
-     * @param quote Body of a quote
+     * @param author Author of a quote
      */
     suspend fun updateQuote(
         quoteId: String,
         title: String,
-        quote: String,
+        author: String,
     ): Either<String>
 
     /**
@@ -66,6 +66,6 @@ interface QuoteRepository {
     companion object {
         private const val PREFIX_TEMP_QUOTE_ID = "TMP"
         fun generateTemporaryId() = "$PREFIX_TEMP_QUOTE_ID-${UUID.randomUUID()}"
-        fun isTemporaryQuote(quoteId: String) = quoteId.startsWith(PREFIX_TEMP_QUOTE_ID)
+//        fun isTemporaryQuote(quoteId: String) = quoteId.startsWith(PREFIX_TEMP_QUOTE_ID)
     }
 }
