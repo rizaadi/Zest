@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.zephysus.zest.ui.Screen
+import com.zephysus.zest.ui.screens.quotes.AddQuoteScreen
 import com.zephysus.zest.ui.screens.quotes.QuotesScreen
 
 const val ZEST_NAV_HOST_ROUTE = "zest-main-route"
@@ -17,15 +18,31 @@ fun ZestNavigation() {
 
     NavHost(navController, startDestination = Screen.Quotes.route, route = ZEST_NAV_HOST_ROUTE) {
         composable(Screen.Quotes.route) {
-            QuotesScreen(viewModel = hiltViewModel(), onNavigateToAddQuote = {})
+            QuotesScreen(
+                viewModel = hiltViewModel(),
+                onNavigateToAddQuote = {
+                    navController.navigateToAddQuote()
+                },
+            )
+        }
+        composable(Screen.AddQuote.route) {
+            AddQuoteScreen(
+                viewModel = hiltViewModel(),
+                onNavigateUp = { navController.navigateUp() },
+            )
         }
     }
 }
 
 /**
+ * Navigates to Add Quote Screen
+ */
+fun NavController.navigateToAddQuote() = navigate(Screen.AddQuote.route)
+
+/**
  * Clears backstack including current screen and navigates to Quotes Screen
  */
-fun NavController.popAllAndNavigateToQuotes() = navigate(Screen.Quotes.route) {
-    launchSingleTop = true
-    popUpTo(ZEST_NAV_HOST_ROUTE)
-}
+//fun NavController.popAllAndNavigateToQuotes() = navigate(Screen.Quotes.route) {
+//    launchSingleTop = true
+//    popUpTo(ZEST_NAV_HOST_ROUTE)
+//}
