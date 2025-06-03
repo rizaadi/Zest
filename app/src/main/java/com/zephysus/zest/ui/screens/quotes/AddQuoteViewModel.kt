@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.zephysus.core.di.LocalRepository
 import com.zephysus.core.repository.QuoteRepository
 import com.zephysus.zest.ui.BaseViewModel
+import com.zephysus.zest.utils.validator.QuoteValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -56,7 +57,7 @@ class AddQuoteViewModel @Inject constructor(
     }
 
     private fun validateQuote() {
-        val isValid = state.value.title.isNotBlank() && state.value.author.isNotBlank()
+        val isValid = QuoteValidator.isValidQuote(currentState.title, currentState.author)
         setState {
             it.copy(showSave = isValid)
         }

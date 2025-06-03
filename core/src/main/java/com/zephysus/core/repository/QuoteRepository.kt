@@ -66,6 +66,6 @@ interface QuoteRepository {
     companion object {
         private const val PREFIX_TEMP_QUOTE_ID = "TMP"
         fun generateTemporaryId() = "$PREFIX_TEMP_QUOTE_ID-${UUID.randomUUID()}"
-//        fun isTemporaryQuote(quoteId: String) = quoteId.startsWith(PREFIX_TEMP_QUOTE_ID)
+        fun isTemporaryQuote(quoteId: String) = quoteId.startsWith(PREFIX_TEMP_QUOTE_ID)
     }
 }

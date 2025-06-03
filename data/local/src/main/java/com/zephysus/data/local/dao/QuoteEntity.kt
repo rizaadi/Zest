@@ -9,4 +9,5 @@ class QuoteEntity(
     val title: String,
     val author: String,
     val createdAt: Long,
+    val updatedAt: Long,
 )
