@@ -44,6 +44,13 @@ class DetailQuoteViewModel @AssistedInject constructor(
         validateQuote()
     }
 
+    fun setFeatured(isFeatured: Boolean) {
+        setState {
+            it.copy(isFeatured = isFeatured)
+        }
+        validateQuote()
+    }
+
     fun getQuote() {
         job?.cancel()
         job = viewModelScope.launch {
@@ -58,6 +65,7 @@ class DetailQuoteViewModel @AssistedInject constructor(
                         isLoading = false,
                         title = result.title,
                         author = result.author,
+                        isFeatured = result.isFeatured,
                     )
                 }
             } else {
@@ -74,12 +82,13 @@ class DetailQuoteViewModel @AssistedInject constructor(
     fun save() {
         val title = currentState.title?.trim() ?: return
         val author = currentState.author?.trim() ?: return
+        val isFeatured = currentState.isFeatured
 
         job?.cancel()
         job = viewModelScope.launch {
             setState { it.copy(isLoading = true) }
 
-            val response = localRepository.updateQuote(quoteId, title, author)
+            val response = localRepository.updateQuote(quoteId, title, author, isFeatured)
 
             setState { it.copy(isLoading = false) }
 
@@ -99,13 +108,16 @@ class DetailQuoteViewModel @AssistedInject constructor(
     private fun validateQuote() {
         val oldTitle = currentQuote.title
         val oldNote = currentQuote.author
+        val oldIsFeatured = currentQuote.isFeatured
 
         val title = currentState.title
         val author = currentState.author
+        val isFeatured = currentState.isFeatured
 
         val isValid = title != null && author != null && QuoteValidator.isValidQuote(title, author)
 
-        val areOldAndUpdatedQuoteSame = oldTitle == title?.trim() && oldNote == author?.trim()
+        val areOldAndUpdatedQuoteSame =
+            oldTitle == title?.trim() && oldNote == author?.trim() && oldIsFeatured == isFeatured
 
         setState { it.copy(showSave = isValid && !areOldAndUpdatedQuoteSame) }
 

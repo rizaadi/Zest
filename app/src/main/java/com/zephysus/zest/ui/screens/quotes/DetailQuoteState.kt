@@ -7,6 +7,7 @@ import com.zephysus.zest.ui.State
 data class DetailQuoteState(
     val title: String? = null,
     val author: String? = null,
+    val isFeatured: Boolean = false,
     val isLoading: Boolean = false,
     val showSave: Boolean = false,
     val finished: Boolean = false,

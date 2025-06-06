@@ -18,28 +18,40 @@ class LocalQuoteRepositoryImpl @Inject constructor(
 ) : QuoteRepository {
 
     override fun getQuoteById(quoteId: String): Flow<Quote> =
-        quotesDao.getQuoteById(quoteId).filterNotNull()
-            .map { Quote(it.quoteId, it.title, it.author, it.createdAt, it.updatedAt) }
-
-    override fun getAllQuotes(): Flow<Either<List<Quote>>> = quotesDao.getAllQuotes()
-        .map { quotes -> quotes.map { Quote(it.quoteId, it.title, it.author, it.createdAt, it.updatedAt) } }
-        .transform { quotes -> emit(Either.success(quotes)) }
-        .catch { emit(Either.success(emptyList())) }
-
-    override suspend fun addQuote(title: String, author: String): Either<String> =
-        kotlin.runCatching {
-            val tempQuoteId = QuoteRepository.generateTemporaryId()
-            quotesDao.addQuote(
-                QuoteEntity(
-                    quoteId = tempQuoteId,
-                    title = title,
-                    author = author,
-                    createdAt = System.currentTimeMillis(),
-                    updatedAt = System.currentTimeMillis(),
-                )
+        quotesDao.getQuoteById(quoteId).filterNotNull().map {
+            Quote(
+                it.quoteId, it.title, it.author, it.isFeatured, it.createdAt, it.updatedAt
             )
-            Either.success(tempQuoteId)
-        }.getOrDefault(Either.error("Unable to create a new quote"))
+        }
+
+    override fun getAllQuotes(): Flow<Either<List<Quote>>> =
+        quotesDao.getAllQuotes().map { quotes ->
+            quotes.map {
+                Quote(
+                    it.quoteId, it.title, it.author, it.isFeatured, it.createdAt, it.updatedAt
+                )
+            }
+        }.transform { quotes -> emit(Either.success(quotes)) }
+            .catch { emit(Either.success(emptyList())) }
+
+    override suspend fun addQuote(
+        title: String,
+        author: String,
+        isFeatured: Boolean,
+    ): Either<String> = kotlin.runCatching {
+        val tempQuoteId = QuoteRepository.generateTemporaryId()
+        quotesDao.addQuote(
+            QuoteEntity(
+                quoteId = tempQuoteId,
+                title = title,
+                author = author,
+                isFeatured = isFeatured,
+                createdAt = System.currentTimeMillis(),
+                updatedAt = System.currentTimeMillis(),
+            )
+        )
+        Either.success(tempQuoteId)
+    }.getOrDefault(Either.error("Unable to create a new quote"))
 
     override suspend fun addQuotes(quotes: List<Quote>) = quotes.map {
         QuoteEntity(
@@ -47,6 +59,7 @@ class LocalQuoteRepositoryImpl @Inject constructor(
             title = it.title,
             author = it.author,
             createdAt = it.createdAt,
+            isFeatured = it.isFeatured,
             updatedAt = it.updatedAt,
         )
     }.let {
@@ -57,8 +70,9 @@ class LocalQuoteRepositoryImpl @Inject constructor(
         quoteId: String,
         title: String,
         author: String,
+        isFeatured: Boolean,
     ): Either<String> = runCatching {
-        quotesDao.updateQuoteById(quoteId, title, author)
+        quotesDao.updateQuoteById(quoteId, title, author, isFeatured)
         Either.success(quoteId)
     }.getOrDefault(Either.error("Unable to update quote"))
 

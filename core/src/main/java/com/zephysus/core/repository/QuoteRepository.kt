@@ -27,8 +27,9 @@ interface QuoteRepository {
      *
      * @param title Title of a quote
      * @param author Author of a quote
+     * @param isFeatured Whether the quote is featured
      */
-    suspend fun addQuote(title: String, author: String): Either<String>
+    suspend fun addQuote(title: String, author: String, isFeatured: Boolean): Either<String>
 
     /**
      * Adds a list of quotes. Replaces quotes if already exists
@@ -41,11 +42,13 @@ interface QuoteRepository {
      * @param quoteId The Quote ID
      * @param title Title of a quote
      * @param author Author of a quote
+     * @param isFeatured Whether the quote is featured
      */
     suspend fun updateQuote(
         quoteId: String,
         title: String,
         author: String,
+        isFeatured: Boolean,
     ): Either<String>
 
     /**
