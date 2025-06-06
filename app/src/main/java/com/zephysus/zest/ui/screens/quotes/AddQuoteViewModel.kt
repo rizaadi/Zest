@@ -31,14 +31,24 @@ class AddQuoteViewModel @Inject constructor(
         validateQuote()
     }
 
+    fun setFeatured(isFeatured: Boolean) {
+        setState {
+            it.copy(isFeatured = isFeatured)
+        }
+        validateQuote()
+    }
+
     fun saveQuote() {
         job?.cancel()
         job = viewModelScope.launch {
             setState {
                 it.copy(isLoading = true)
             }
-            val result =
-                localRepository.addQuote(title = state.value.title, author = state.value.author)
+            val result = localRepository.addQuote(
+                title = state.value.title,
+                author = state.value.author,
+                isFeatured = state.value.isFeatured
+            )
             result.onSuccess {
                 setState {
                     it.copy(

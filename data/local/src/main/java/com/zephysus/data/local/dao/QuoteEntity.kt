@@ -8,6 +8,7 @@ class QuoteEntity(
     @PrimaryKey(autoGenerate = false) val quoteId: String,
     val title: String,
     val author: String,
+    val isFeatured: Boolean,
     val createdAt: Long,
     val updatedAt: Long,
 )

@@ -20,11 +20,12 @@ interface QuotesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addQuotes(notes: List<QuoteEntity>)
 
-    @Query("UPDATE quotes SET title = :title, author = :author , updatedAt = :updatedAt WHERE quoteId = :quoteId")
+    @Query("UPDATE quotes SET title = :title, author = :author , isFeatured = :isFeatured, updatedAt = :updatedAt WHERE quoteId = :quoteId")
     suspend fun updateQuoteById(
         quoteId: String,
         title: String,
         author: String,
+        isFeatured: Boolean,
         updatedAt: Long = System.currentTimeMillis(),
     )
 
