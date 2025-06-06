@@ -19,10 +19,10 @@ class LocalQuoteRepositoryImpl @Inject constructor(
 
     override fun getQuoteById(quoteId: String): Flow<Quote> =
         quotesDao.getQuoteById(quoteId).filterNotNull()
-            .map { Quote(it.quoteId, it.title, it.author, it.createdAt) }
+            .map { Quote(it.quoteId, it.title, it.author, it.createdAt, it.updatedAt) }
 
     override fun getAllQuotes(): Flow<Either<List<Quote>>> = quotesDao.getAllQuotes()
-        .map { quotes -> quotes.map { Quote(it.quoteId, it.title, it.author, it.createdAt) } }
+        .map { quotes -> quotes.map { Quote(it.quoteId, it.title, it.author, it.createdAt, it.updatedAt) } }
         .transform { quotes -> emit(Either.success(quotes)) }
         .catch { emit(Either.success(emptyList())) }
 
@@ -35,6 +35,7 @@ class LocalQuoteRepositoryImpl @Inject constructor(
                     title = title,
                     author = author,
                     createdAt = System.currentTimeMillis(),
+                    updatedAt = System.currentTimeMillis(),
                 )
             )
             Either.success(tempQuoteId)
@@ -46,6 +47,7 @@ class LocalQuoteRepositoryImpl @Inject constructor(
             title = it.title,
             author = it.author,
             createdAt = it.createdAt,
+            updatedAt = it.updatedAt,
         )
     }.let {
         quotesDao.addQuotes(it)

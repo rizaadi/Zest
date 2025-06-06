@@ -32,11 +32,14 @@ import com.zephysus.zest.component.scaffold.ZestTopAppBar
 fun QuotesScreen(
     viewModel: QuotesViewModel,
     onNavigateToAddQuote: () -> Unit,
+    onNavigateToDetailQuote: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
     QuotesContent(
-        quotes = state.quotes, onNavigateToAddQuote = onNavigateToAddQuote
+        quotes = state.quotes,
+        onNavigateToAddQuote = onNavigateToAddQuote,
+        onNavigateToDetailQuote = onNavigateToDetailQuote
     )
 }
 
@@ -44,6 +47,7 @@ fun QuotesScreen(
 fun QuotesContent(
     quotes: List<Quote>,
     onNavigateToAddQuote: () -> Unit,
+    onNavigateToDetailQuote: (String) -> Unit,
 ) {
     ZestScaffold(
         zestTopAppBar = {
@@ -60,7 +64,9 @@ fun QuotesContent(
                         modifier = Modifier
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                             .fillMaxWidth()
-                            .clickable { },
+                            .clickable {
+                                onNavigateToDetailQuote(quote.id)
+                            },
                         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
@@ -74,12 +80,10 @@ fun QuotesContent(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onNavigateToAddQuote,
-                modifier = Modifier.padding(16.dp)
+                onClick = onNavigateToAddQuote, modifier = Modifier.padding(16.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "Add Quote"
+                    imageVector = Icons.Filled.Add, contentDescription = "Add Quote"
                 )
             }
         },

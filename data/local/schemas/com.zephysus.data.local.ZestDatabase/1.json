@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "99db35d8b87353e3afa0bf48d3b9261d",
+    "identityHash": "3be331a883e7a93af7829b64e5b6b3e0",
     "entities": [
       {
         "tableName": "quotes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`quoteId` TEXT NOT NULL, `title` TEXT NOT NULL, `author` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, PRIMARY KEY(`quoteId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`quoteId` TEXT NOT NULL, `title` TEXT NOT NULL, `author` TEXT NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL, PRIMARY KEY(`quoteId`))",
         "fields": [
           {
             "fieldPath": "quoteId",
@@ -31,6 +31,12 @@
             "columnName": "createdAt",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -46,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '99db35d8b87353e3afa0bf48d3b9261d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3be331a883e7a93af7829b64e5b6b3e0')"
     ]
   }
 }
