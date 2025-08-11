@@ -11,12 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,27 +27,33 @@ import com.zephysus.zest.component.scaffold.ZestTopAppBar
 @Composable
 fun QuotesScreen(
     viewModel: QuotesViewModel,
-    onNavigateToAddQuote: () -> Unit,
+    onNavigateToUp: () -> Unit,
     onNavigateToDetailQuote: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
 
     QuotesContent(
         quotes = state.quotes,
-        onNavigateToAddQuote = onNavigateToAddQuote,
-        onNavigateToDetailQuote = onNavigateToDetailQuote
+        isLoading = state.isLoading,
+        onNavigateToDetailQuote = onNavigateToDetailQuote,
+        onNavigateUp = onNavigateToUp
     )
 }
 
 @Composable
 fun QuotesContent(
     quotes: List<Quote>,
-    onNavigateToAddQuote: () -> Unit,
+    isLoading: Boolean,
     onNavigateToDetailQuote: (String) -> Unit,
+    onNavigateUp: () -> Unit
 ) {
     ZestScaffold(
+        isLoading = isLoading,
         zestTopAppBar = {
-            ZestTopAppBar()
+            ZestTopAppBar(
+                title = "Quotes",
+                onNavigateUp = onNavigateUp
+            )
         },
         content = { innerPadding ->
             LazyColumn(
@@ -78,14 +80,6 @@ fun QuotesContent(
                 }
             }
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onNavigateToAddQuote, modifier = Modifier.padding(16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add, contentDescription = "Add Quote"
-                )
-            }
-        },
+
     )
 }

@@ -9,9 +9,11 @@ import com.zephysus.zest.component.dialog.LoaderDialog
 
 @Composable
 fun ZestScaffold(
-    modifier: Modifier = Modifier, zestTopAppBar: @Composable () -> Unit = {},
+    modifier: Modifier = Modifier, 
+    zestTopAppBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
     floatingActionButton: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
     isLoading: Boolean = false,
     error: String? = null,
 ) {
@@ -25,6 +27,7 @@ fun ZestScaffold(
         modifier = modifier,
         topBar = zestTopAppBar,
         content = content,
-        floatingActionButton = floatingActionButton
+        floatingActionButton = floatingActionButton,
+        bottomBar = bottomBar
     )
 }

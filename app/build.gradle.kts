@@ -44,6 +44,8 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.lazy.swipe.cards)
+    implementation(libs.compose.swipeable.cards)
 
     testImplementation(libs.junit)
 

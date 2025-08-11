@@ -4,7 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
 import com.zephysus.zest.navigation.ZestNavigation
 import com.zephysus.zest.ui.screens.quotes.DetailQuoteViewModel
 import com.zephysus.zest.ui.theme.ZestTheme
@@ -28,7 +34,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             ZestTheme {
                 Surface {
-                    ZestNavigation()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .windowInsetsPadding(WindowInsets.systemBars)
+                    ) {
+                        ZestNavigation()
+                    }
                 }
             }
         }

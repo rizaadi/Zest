@@ -1,4 +1,4 @@
-package com.zephysus.zest.ui.screens.quotes
+package com.zephysus.zest.ui.screens.home
 
 import androidx.lifecycle.viewModelScope
 import com.zephysus.core.di.LocalRepository
@@ -13,9 +13,9 @@ import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 @HiltViewModel
-class QuotesViewModel @Inject constructor(
+class HomeViewModel @Inject constructor(
     @LocalRepository private val localRepository: QuoteRepository,
-) : BaseViewModel<QuotesState>(initialState = QuotesState()) {
+) : BaseViewModel<HomeState>(initialState = HomeState()) {
 
     init {
         observeQuotes()
