@@ -7,8 +7,6 @@ import com.zephysus.zest.ui.State
 @Immutable
 data class QuotesState(
     val isLoading: Boolean = false,
-    val featuredQuotes: List<Quote> = emptyList(),
-    val currentIndex: Int = 0,
     val quotes: List<Quote> = emptyList(),
     val error: String? = null,
 ) : State

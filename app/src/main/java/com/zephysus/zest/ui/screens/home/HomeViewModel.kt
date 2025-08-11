@@ -27,7 +27,6 @@ class HomeViewModel @Inject constructor(
                 setState {
                     it.copy(
                         isLoading = false,
-                        quotes = quotes,
                         featuredQuotes = quotes.toMutableList(),
                     )
                 }

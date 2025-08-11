@@ -9,17 +9,10 @@ class SettingsViewModel @Inject constructor() : BaseViewModel<SettingsState>(
     initialState = SettingsState()
 ) {
 
-
-
     fun toggleNotifications() {
         setState { currentState ->
             currentState.copy(notificationsEnabled = !currentState.notificationsEnabled)
         }
     }
 
-    fun clearError() {
-        setState { currentState ->
-            currentState.copy(error = null)
-        }
-    }
 }

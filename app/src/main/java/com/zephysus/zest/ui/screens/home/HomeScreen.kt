@@ -54,7 +54,8 @@ import com.zephysus.zest.ui.theme.instrumentFamily
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-
+    onNavigateToAddQuote : () -> Unit,
+    onNavigateToDetailQuote: (String) -> Unit,
     bottomNavigation: @Composable () -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()

@@ -28,7 +28,6 @@ class QuotesViewModel @Inject constructor(
                     it.copy(
                         isLoading = false,
                         quotes = quotes,
-                        featuredQuotes = quotes.toMutableList(),
                     )
                 }
             }.onFailure { message ->
@@ -39,15 +38,5 @@ class QuotesViewModel @Inject constructor(
                 }
             }
         }.onStart { setState { it.copy(isLoading = true) } }.launchIn(viewModelScope)
-    }
-
-    fun onQuoteSwiped(quote: Quote) {
-        setState {
-            val newList = it.featuredQuotes.toMutableList().apply {
-                removeFirstOrNull()
-                add(quote) // Tambahkan ke akhir
-            }
-            it.copy(featuredQuotes = newList)
-        }
     }
 }

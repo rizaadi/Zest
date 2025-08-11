@@ -15,16 +15,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.zephysus.zest.R
-import com.zephysus.zest.ui.Screen
 import com.zephysus.zest.ui.theme.blackBg2
-import com.zephysus.zest.ui.theme.bottomNavAddButton
-import com.zephysus.zest.ui.theme.bottomNavBackground
 import com.zephysus.zest.ui.theme.bottomNavIconActive
 import com.zephysus.zest.ui.theme.bottomNavIconInactive
 
