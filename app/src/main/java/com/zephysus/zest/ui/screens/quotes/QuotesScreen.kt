@@ -22,10 +22,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,9 +33,9 @@ import com.zephysus.core.model.Quote
 import com.zephysus.zest.R
 import com.zephysus.zest.component.scaffold.ZestScaffold
 import com.zephysus.zest.component.scaffold.ZestTopAppBar
-import com.zephysus.zest.ui.theme.blackBg2
 import com.zephysus.zest.ui.theme.InstrumentTypography
 import com.zephysus.zest.ui.theme.Typography
+import com.zephysus.zest.ui.theme.blackBg2
 
 @Composable
 fun QuotesScreen(
