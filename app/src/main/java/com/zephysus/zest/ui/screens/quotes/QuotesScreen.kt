@@ -122,12 +122,11 @@ private fun QuoteCard(
                     .background(
                         color = Color.White.copy(alpha = 0.15f), shape = RoundedCornerShape(8.dp)
                     )
-                    .padding(horizontal = 6.dp, vertical = 0.dp)
+                    .padding(horizontal = 6.dp, vertical = 2.dp)
             ) {
                 Text(
                     text = "Featured",
                     style = Typography.labelSmall,
-                    fontWeight = FontWeight.Medium,
                     color = Color.White
                 )
             }
