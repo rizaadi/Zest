@@ -34,6 +34,16 @@ class LocalQuoteRepositoryImpl @Inject constructor(
         }.transform { quotes -> emit(Either.success(quotes)) }
             .catch { emit(Either.success(emptyList())) }
 
+    override fun getAllFeaturedQuotes(): Flow<Either<List<Quote>>> =
+        quotesDao.getAllFeaturedQuotes().map { quotes ->
+            quotes.map {
+                Quote(
+                    it.quoteId, it.title, it.author, it.isFeatured, it.createdAt, it.updatedAt
+                )
+            }
+        }.transform { quotes -> emit(Either.success(quotes)) }
+            .catch { emit(Either.success(emptyList())) }
+
     override suspend fun addQuote(
         title: String,
         author: String,

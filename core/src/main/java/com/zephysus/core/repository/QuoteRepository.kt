@@ -23,6 +23,11 @@ interface QuoteRepository {
     fun getAllQuotes(): Flow<Either<List<Quote>>>
 
     /**
+     * Returns all featured quotes.
+     */
+    fun getAllFeaturedQuotes(): Flow<Either<List<Quote>>>
+
+    /**
      * Adds a new quote
      *
      * @param title Title of a quote

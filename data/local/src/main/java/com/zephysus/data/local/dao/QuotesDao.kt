@@ -14,6 +14,9 @@ interface QuotesDao {
     @Query("select* from quotes ORDER BY createdAt DESC")
     fun getAllQuotes(): Flow<List<QuoteEntity>>
 
+    @Query("SELECT * FROM quotes WHERE isFeatured = 1 ORDER BY createdAt DESC")
+    fun getAllFeaturedQuotes(): Flow<List<QuoteEntity>>
+
     @Insert
     suspend fun addQuote(quote: QuoteEntity)
 

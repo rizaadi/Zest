@@ -18,11 +18,11 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel<HomeState>(initialState = HomeState()) {
 
     init {
-        observeQuotes()
+        observeFeaturesQuotes()
     }
 
-    private fun observeQuotes() {
-        localRepository.getAllQuotes().distinctUntilChanged().onEach { res ->
+    private fun observeFeaturesQuotes() {
+        localRepository.getAllFeaturedQuotes().distinctUntilChanged().onEach { res ->
             res.onSuccess { quotes ->
                 setState {
                     it.copy(
