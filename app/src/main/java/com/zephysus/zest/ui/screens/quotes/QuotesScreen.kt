@@ -27,17 +27,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.zephysus.core.model.Quote
 import com.zephysus.zest.R
 import com.zephysus.zest.component.scaffold.ZestScaffold
 import com.zephysus.zest.component.scaffold.ZestTopAppBar
 import com.zephysus.zest.ui.theme.blackBg2
-import com.zephysus.zest.ui.theme.instrumentFamily
+import com.zephysus.zest.ui.theme.InstrumentTypography
+import com.zephysus.zest.ui.theme.Typography
 
 @Composable
 fun QuotesScreen(
@@ -100,9 +99,7 @@ private fun QuoteCard(
         .clip(RoundedCornerShape(20.dp))
         .background(blackBg2)
         .border(
-            width = 1.dp,
-            color = Color.White.copy(alpha = 0.1f),
-            shape = RoundedCornerShape(20.dp)
+            width = 1.dp, color = Color.White.copy(alpha = 0.1f), shape = RoundedCornerShape(20.dp)
         )
         .fillMaxWidth()
         .clickable {
@@ -129,7 +126,7 @@ private fun QuoteCard(
             ) {
                 Text(
                     text = "Featured",
-                    fontSize = 10.sp,
+                    style = Typography.labelSmall,
                     fontWeight = FontWeight.Medium,
                     color = Color.White
                 )
@@ -149,12 +146,8 @@ private fun QuoteCard(
         ) {
             Text(
                 text = quote.title,
-                fontFamily = instrumentFamily,
-                fontSize = 14.sp,
+                style = InstrumentTypography.bodyMedium,
                 color = Color.White,
-                style = TextStyle(
-                    lineHeight = 18.sp, letterSpacing = 0.5.sp
-                ),
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(vertical = 0.dp)
@@ -162,8 +155,8 @@ private fun QuoteCard(
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = quote.author,
+                style = Typography.labelSmall,
                 color = Color.Gray,
-                fontSize = 11.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.padding(vertical = 0.dp)
