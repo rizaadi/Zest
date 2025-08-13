@@ -8,5 +8,6 @@ import com.zephysus.zest.ui.State
 data class HomeState(
     val isLoading: Boolean = false,
     val featuredQuotes: List<Quote> = emptyList(),
+    val swipeCounter: Int = 0,
     val error: String? = null,
 ) : State

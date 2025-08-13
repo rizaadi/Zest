@@ -22,31 +22,40 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun observeFeaturesQuotes() {
-        localRepository.getAllFeaturedQuotes().distinctUntilChanged().onEach { res ->
-            res.onSuccess { quotes ->
-                setState {
-                    it.copy(
-                        isLoading = false,
-                        featuredQuotes = quotes.toMutableList(),
-                    )
+        localRepository.getAllFeaturedQuotes().distinctUntilChanged()
+            .onStart { setState { it.copy(isLoading = true) } }.onEach { result ->
+                result.onSuccess { quotes ->
+                    setState {
+                        it.copy(
+                            isLoading = false, featuredQuotes = quotes, error = null
+                        )
+                    }
+                }.onFailure { message ->
+                    setState {
+                        it.copy(
+                            isLoading = false, error = message
+                        )
+                    }
                 }
-            }.onFailure { message ->
-                setState {
-                    it.copy(
-                        isLoading = false, error = message
-                    )
-                }
-            }
-        }.onStart { setState { it.copy(isLoading = true) } }.launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 
     fun onQuoteSwiped(quote: Quote) {
-        setState {
-            val newList = it.featuredQuotes.toMutableList().apply {
-                removeFirstOrNull()
-                add(quote) // Tambahkan ke akhir
+        setState { state ->
+            when {
+                state.featuredQuotes.isEmpty() -> state
+                state.featuredQuotes.size == 1 -> {
+                    // Single quote: increment counter to reset UI
+                    state.copy(swipeCounter = state.swipeCounter + 1)
+                }
+
+                else -> {
+                    // Multiple quotes: cycle the swiped quote to end
+                    val quotes = state.featuredQuotes
+                    val newQuotes = quotes.filter { it.id != quote.id } + quote
+                    state.copy(featuredQuotes = newQuotes)
+                }
             }
-            it.copy(featuredQuotes = newList)
         }
     }
 }
