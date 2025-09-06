@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.zest.android.application)
     alias(libs.plugins.zest.android.application.compose)
-    alias(libs.plugins.zest.hilt)
+    alias(libs.plugins.zest.hilt) // This now applies KAPT and hilt-compiler
+    alias(libs.plugins.ksp)       // Keep for other KSP processors (e.g., Room)
 }
 
 android {
@@ -37,7 +38,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose) // Keep: Hilt specific for navigation
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.tracing.ktx)
@@ -46,6 +47,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.lazy.swipe.cards)
     implementation(libs.compose.swipeable.cards)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.common) // Keep: May be needed if not covered by hilt.android/core
+    implementation(libs.androidx.hilt.work)   // Keep: Specific for Hilt + WorkManager integration
 
     testImplementation(libs.junit)
 

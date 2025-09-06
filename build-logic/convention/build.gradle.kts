@@ -51,7 +51,7 @@ gradlePlugin {
         }
         register("hilt") {
             id = libs.plugins.zest.hilt.get().pluginId
-            implementationClass = "HiltConventionPlugin"
+            implementationClass = "com.zephysus.zest.convention.HiltConventionPlugin"
         }
         register("androidRoom") {
             id = libs.plugins.zest.android.room.get().pluginId

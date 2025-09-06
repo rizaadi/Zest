@@ -6,11 +6,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,11 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zephysus.zest.R
 import com.zephysus.zest.ui.theme.blackBg2
-import com.zephysus.zest.ui.theme.bottomNavIconActive
-import com.zephysus.zest.ui.theme.bottomNavIconInactive
 
 @Composable
 fun ZestBottomNavigation(
@@ -48,9 +47,7 @@ fun ZestBottomNavigation(
                     .clip(CircleShape)
                     .background(blackBg2)
                     .border(
-                        width = 1.dp,                        // tipis
-                        color = Color.White.copy(alpha = 0.1f), // soft border
-                        shape = RoundedCornerShape(20.dp)
+                        width = 1.dp, color = Color.White.copy(alpha = 0.1f), shape = CircleShape
                     )
                     .clickable { onNavigateToSettings() }, contentAlignment = Alignment.Center
             ) {
@@ -68,9 +65,7 @@ fun ZestBottomNavigation(
                     .clip(CircleShape)
                     .background(blackBg2)
                     .border(
-                        width = 1.dp,                        // tipis
-                        color = Color.White.copy(alpha = 0.1f), // soft border
-                        shape = RoundedCornerShape(20.dp)
+                        width = 1.dp, color = Color.White.copy(alpha = 0.1f), shape = CircleShape
                     )
                     .clickable { onNavigateToAddQuote() }, contentAlignment = Alignment.Center
             ) {
@@ -88,9 +83,7 @@ fun ZestBottomNavigation(
                     .clip(CircleShape)
                     .background(blackBg2)
                     .border(
-                        width = 1.dp,                        // tipis
-                        color = Color.White.copy(alpha = 0.1f), // soft border
-                        shape = RoundedCornerShape(20.dp)
+                        width = 1.dp, color = Color.White.copy(alpha = 0.1f), shape = CircleShape
                     )
                     .clickable { onNavigateToQuotes() }, contentAlignment = Alignment.Center
             ) {
@@ -106,25 +99,19 @@ fun ZestBottomNavigation(
 }
 
 @Composable
-private fun BottomNavItem(
-    icon: Int,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+@Preview(showBackground = true)
+fun ZestBottomNavigationPreview() {
     Box(
-        modifier = modifier
-            .clip(CircleShape)
-            .background(
-                if (isSelected) Color.White.copy(alpha = 0.1f) else Color.Transparent
-            )
-            .clickable { onClick() }, contentAlignment = Alignment.Center
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
     ) {
-        Icon(
-            painter = painterResource(icon),
-            contentDescription = null,
-            tint = if (isSelected) bottomNavIconActive else bottomNavIconInactive,
-            modifier = Modifier.size(24.dp)
+        ZestBottomNavigation(
+            currentRoute = "home",
+            onNavigateToSettings = { },
+            onNavigateToAddQuote = { },
+            onNavigateToQuotes = { },
+            modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
 }
