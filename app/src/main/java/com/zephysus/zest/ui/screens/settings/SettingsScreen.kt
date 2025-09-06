@@ -43,8 +43,7 @@ import com.zephysus.zest.ui.theme.blackBg2
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = hiltViewModel(),
-    onNavigateUp: () -> Unit = {}
+    viewModel: SettingsViewModel = hiltViewModel(), onNavigateUp: () -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -86,61 +85,45 @@ fun SettingsContent(
     onRequestPermission: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
-    ZestScaffold(
-        isLoading = state.isLoading,
-        error = state.error,
-        zestTopAppBar = {
-            ZestTopAppBar(
-                title = "Settings",
-                onNavigateUp = onNavigateUp
-            )
-        },
-        content = { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Top
-            ) {
-                SettingsCard {
-                    SettingsItem(
-                        title = "Language",
-                        description = "Change the language",
-                        isChecked = false,
-                        onToggle = {}
-                    )
-                    
-                    Spacer(modifier = Modifier.height(16.dp))
+    ZestScaffold(zestTopAppBar = {
+        ZestTopAppBar(
+            title = "Settings", onNavigateUp = onNavigateUp
+        )
+    }, content = { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Top
+        ) {
+            SettingsCard {
 
-                    NotificationSettingsSection(
-                        notificationSettings = state.notificationSettings,
-                        hasPermission = state.hasNotificationPermission,
-                        hasFeaturedQuotes = state.hasFeaturedQuotes,
-                        onToggleNotifications = onToggleNotifications,
-                        onUpdateInterval = onUpdateInterval
-                    )
-                }
+                NotificationSettingsSection(
+                    notificationSettings = state.notificationSettings,
+                    hasPermission = state.hasNotificationPermission,
+                    hasFeaturedQuotes = state.hasFeaturedQuotes,
+                    onToggleNotifications = onToggleNotifications,
+                    onUpdateInterval = onUpdateInterval
+                )
+            }
 
-                Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-                SettingsCard {
-                    Text(
-                        text = "About",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                    Text(
-                        text = "App Version: ${state.appVersion}",
-                        fontSize = 14.sp,
-                        color = Color.Gray
-                    )
-                }
+            SettingsCard {
+                Text(
+                    text = "About",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Text(
+                    text = "App Version: ${state.appVersion}", fontSize = 14.sp, color = Color.Gray
+                )
             }
         }
-    )
+    })
 
     // Permission Dialog
     if (state.showPermissionDialog) {
@@ -159,8 +142,7 @@ fun SettingsContent(
                 TextButton(onClick = onDismissPermissionDialog) {
                     Text("Cancel")
                 }
-            }
-        )
+            })
     }
 
     // No Quotes Warning Dialog
@@ -175,8 +157,7 @@ fun SettingsContent(
                 Button(onClick = onDismissNoQuotesWarning) {
                     Text("OK")
                 }
-            }
-        )
+            })
     }
 }
 
@@ -200,10 +181,7 @@ private fun SettingsCard(
 
 @Composable
 private fun SettingsItem(
-    title: String,
-    description: String,
-    isChecked: Boolean,
-    onToggle: () -> Unit
+    title: String, description: String, isChecked: Boolean, onToggle: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -214,22 +192,15 @@ private fun SettingsItem(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = title,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.White
+                text = title, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = Color.White
             )
             Text(
-                text = description,
-                fontSize = 14.sp,
-                color = Color.Gray
+                text = description, fontSize = 14.sp, color = Color.Gray
             )
         }
-        
+
         Switch(
-            checked = isChecked,
-            onCheckedChange = { onToggle() }
-        )
+            checked = isChecked, onCheckedChange = { onToggle() })
     }
 }
 
@@ -243,14 +214,11 @@ private fun NotificationSettingsSection(
 ) {
     Column {
         SettingsItem(
-            title = "Notifications",
-            description = when {
+            title = "Notifications", description = when {
                 !hasFeaturedQuotes -> "Add featured quotes first"
                 !hasPermission -> "Permission required"
                 else -> "Receive featured quote reminders"
-            },
-            isChecked = notificationSettings.isEnabled,
-            onToggle = onToggleNotifications
+            }, isChecked = notificationSettings.isEnabled, onToggle = onToggleNotifications
         )
 
         if (notificationSettings.isEnabled) {
@@ -266,8 +234,7 @@ private fun NotificationSettingsSection(
 
 @Composable
 private fun IntervalSelector(
-    selectedInterval: NotificationInterval,
-    onIntervalSelected: (NotificationInterval) -> Unit
+    selectedInterval: NotificationInterval, onIntervalSelected: (NotificationInterval) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -282,24 +249,18 @@ private fun IntervalSelector(
 
         Box {
             Button(
-                onClick = { expanded = true },
-                modifier = Modifier.fillMaxWidth()
+                onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()
             ) {
                 Text(selectedInterval.displayName)
             }
 
             DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
+                expanded = expanded, onDismissRequest = { expanded = false }) {
                 NotificationInterval.entries.forEach { interval ->
-                    DropdownMenuItem(
-                        text = { Text(interval.displayName) },
-                        onClick = {
-                            onIntervalSelected(interval)
-                            expanded = false
-                        }
-                    )
+                    DropdownMenuItem(text = { Text(interval.displayName) }, onClick = {
+                        onIntervalSelected(interval)
+                        expanded = false
+                    })
                 }
             }
         }

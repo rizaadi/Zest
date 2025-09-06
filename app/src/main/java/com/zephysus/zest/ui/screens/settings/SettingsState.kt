@@ -4,8 +4,6 @@ import com.zephysus.core.model.NotificationSettings
 import com.zephysus.zest.ui.State
 
 data class SettingsState(
-    val isLoading: Boolean = false,
-    val error: String? = null,
     val darkModeEnabled: Boolean = true,
     val notificationSettings: NotificationSettings = NotificationSettings(),
     val hasNotificationPermission: Boolean = false,
