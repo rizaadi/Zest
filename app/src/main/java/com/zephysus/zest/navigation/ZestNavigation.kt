@@ -1,5 +1,7 @@
 package com.zephysus.zest.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,7 +31,11 @@ fun ZestNavigation() {
     val currentRoute = currentBackStackEntry?.destination?.route ?: Screen.Home.route
 
     NavHost(navController, startDestination = Screen.Home.route, route = ZEST_NAV_HOST_ROUTE) {
-        composable(Screen.Home.route) {
+        composable(
+            Screen.Home.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
             HomeScreen(viewModel = hiltViewModel(), onNavigateToAddQuote = {
                 navController.navigateToAddQuote()
             }, onNavigateToDetailQuote = {
@@ -43,17 +49,29 @@ fun ZestNavigation() {
                     })
             })
         }
-        composable(Screen.Settings.route) {
+        composable(
+            Screen.Settings.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
             SettingsScreen(viewModel = hiltViewModel(),
                 onNavigateUp = { navController.navigateUp() })
         }
-        composable(Screen.AddQuote.route) {
+        composable(
+            Screen.AddQuote.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
             AddQuoteScreen(
                 viewModel = hiltViewModel(),
                 onNavigateUp = { navController.navigateUp() },
             )
         }
-        composable(Screen.Quotes.route) {
+        composable(
+            Screen.Quotes.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
             QuotesScreen(
                 viewModel = hiltViewModel(),
                 onNavigateToUp = {
@@ -63,11 +81,14 @@ fun ZestNavigation() {
             )
         }
         composable(
-            Screen.DetailQuote.route, arguments = listOf(
+            Screen.DetailQuote.route,
+            arguments = listOf(
                 navArgument(Screen.DetailQuote.ARG_QUOTE_ID) {
                     type = NavType.StringType
                 },
-            )
+            ),
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
         ) {
             val quoteId = requireNotNull(it.arguments?.getString(Screen.DetailQuote.ARG_QUOTE_ID))
             DetailQuoteScreen(
