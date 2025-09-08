@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <supports-screens
+        android:largeScreens="false"
+        android:normalScreens="true"
+        android:requiresSmallestWidthDp="320"
+        android:smallScreens="true"
+        android:xlargeScreens="false" />
+
     <!-- Notification permissions -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -16,7 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zest"
-        tools:targetApi="31">
+        tools:targetApi="35">
         <!-- Disable automatic WorkManager initialization -->
         <provider
             android:name="androidx.startup.InitializationProvider"
@@ -31,7 +38,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Zest">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Zest"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
