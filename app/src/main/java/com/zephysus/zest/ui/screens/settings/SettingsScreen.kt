@@ -1,7 +1,9 @@
 package com.zephysus.zest.ui.screens.settings
 
+import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -30,16 +33,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.zephysus.core.model.NotificationInterval
-import com.zephysus.zest.component.scaffold.ZestScaffold
-import com.zephysus.zest.component.scaffold.ZestTopAppBar
+import com.zephysus.core.model.NotificationSettings
+import com.zephysus.zest.component.ZestScaffold
+import com.zephysus.zest.component.ZestTopAppBar
+import com.zephysus.zest.ui.theme.ZestTheme
 import com.zephysus.zest.ui.theme.blackBg2
+import com.zephysus.zest.ui.theme.whiteBg2
 
 @Composable
 fun SettingsScreen(
@@ -115,11 +121,13 @@ fun SettingsContent(
                     text = "About",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(
-                    text = "App Version: ${state.appVersion}", fontSize = 14.sp, color = Color.Gray
+                    text = "App Version: ${state.appVersion}",
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
@@ -168,7 +176,7 @@ private fun SettingsCard(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = blackBg2),
+        colors = CardDefaults.cardColors(containerColor = if (isSystemInDarkTheme()) blackBg2 else whiteBg2),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -192,10 +200,15 @@ private fun SettingsItem(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = title, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = Color.White
+                text = title,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = description, fontSize = 14.sp, color = Color.Gray
+                text = description,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
@@ -206,7 +219,7 @@ private fun SettingsItem(
 
 @Composable
 private fun NotificationSettingsSection(
-    notificationSettings: com.zephysus.core.model.NotificationSettings,
+    notificationSettings: NotificationSettings,
     hasPermission: Boolean,
     hasFeaturedQuotes: Boolean,
     onToggleNotifications: () -> Unit,
@@ -243,7 +256,7 @@ private fun IntervalSelector(
             text = "Notification Interval",
             fontSize = 14.sp,
             fontWeight = FontWeight.Medium,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -264,5 +277,26 @@ private fun IntervalSelector(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun SettingsScreenPreview() {
+    ZestTheme {
+        SettingsContent(
+            state = SettingsState(
+                notificationSettings = NotificationSettings(
+                    isEnabled = true, interval = NotificationInterval.THIRTY_MINUTES
+                ), hasNotificationPermission = true, hasFeaturedQuotes = true, appVersion = "1.0.0"
+            ),
+            onToggleNotifications = {},
+            onUpdateInterval = {},
+            onDismissPermissionDialog = {},
+            onDismissNoQuotesWarning = {},
+            onRequestPermission = {},
+            onNavigateUp = {},
+        )
     }
 }

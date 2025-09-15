@@ -1,9 +1,11 @@
 package com.zephysus.zest.ui.screens.home
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,7 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -44,8 +46,8 @@ import com.spartapps.swipeablecards.ui.lazy.LazySwipeableCards
 import com.spartapps.swipeablecards.ui.lazy.items
 import com.zephysus.core.model.Quote
 import com.zephysus.zest.R
-import com.zephysus.zest.component.scaffold.ZestScaffold
-import com.zephysus.zest.ui.theme.blackBg2
+import com.zephysus.zest.component.ZestScaffold
+import com.zephysus.zest.ui.theme.ZestTheme
 import com.zephysus.zest.ui.theme.instrumentFamily
 
 @Composable
@@ -87,11 +89,14 @@ fun HomeContent(
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.Top,
                 ) {
-                    Text("Featured Quotes", fontSize = 24.sp, fontFamily = instrumentFamily)
+                    Text(
+                        "Featured Quotes",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontFamily = instrumentFamily
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
 
                     if (featuredQuotes.isEmpty()) {
-                        // Show empty state
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -100,8 +105,8 @@ fun HomeContent(
                         ) {
                             Text(
                                 text = "No featured quotes available",
-                                color = Color.Gray,
-                                style = TextStyle(fontSize = 16.sp)
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.bodyLarge
                             )
                         }
                     } else {
@@ -187,20 +192,22 @@ fun QuoteItem(quote: Quote) {
             .height(500.dp)
             .shadow(
                 elevation = 4.dp,
-                shape = RoundedCornerShape(20.dp),
+                shape = MaterialTheme.shapes.large,
                 clip = false,
             )
-            .clip(RoundedCornerShape(20.dp))
-            .background(blackBg2)
+            .clip(MaterialTheme.shapes.large)
+            .background(MaterialTheme.colorScheme.surface)
             .border(
                 width = 1.dp,
-                color = Color.White.copy(alpha = 0.1f),
-                shape = RoundedCornerShape(20.dp)
+                color = MaterialTheme.colorScheme.outline,
+                shape = MaterialTheme.shapes.large
             )
             .fillMaxSize()
     ) {
         Image(
-            painter = painterResource(R.drawable.quotation),
+            painter = if (isSystemInDarkTheme()) painterResource(R.drawable.quotation) else painterResource(
+                R.drawable.quotation_dark
+            ),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -220,7 +227,7 @@ fun QuoteItem(quote: Quote) {
                 modifier = Modifier
                     .padding(horizontal = 15.dp)
                     .fillMaxWidth(),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = TextStyle(
                     lineHeight = 40.sp
                 )
@@ -228,7 +235,8 @@ fun QuoteItem(quote: Quote) {
             Spacer(modifier = Modifier.height(30.dp))
             Text(
                 text = quote.author,
-                color = Color.Gray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(horizontal = 15.dp)
             )
         }
@@ -238,16 +246,35 @@ fun QuoteItem(quote: Quote) {
 @Composable
 @Preview(showBackground = true)
 fun QuoteItemPreview() {
-    QuoteItem(
-        quote = Quote(
-            id = "1",
-            title = "Stay hungry, stay foolish.",
-            author = "Steve Jobs",
-            isFeatured = false,
-            createdAt = System.currentTimeMillis(),
-            updatedAt = System.currentTimeMillis()
+    ZestTheme {
+        QuoteItem(
+            quote = Quote(
+                id = "1",
+                title = "Stay hungry, stay foolish.",
+                author = "Steve Jobs",
+                isFeatured = false,
+                createdAt = System.currentTimeMillis(),
+                updatedAt = System.currentTimeMillis()
+            )
         )
-    )
+    }
+}
+
+@Composable
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+fun QuoteItemDarkPreview() {
+    ZestTheme(darkTheme = true) {
+        QuoteItem(
+            quote = Quote(
+                id = "1",
+                title = "Stay hungry, stay foolish.",
+                author = "Steve Jobs",
+                isFeatured = false,
+                createdAt = System.currentTimeMillis(),
+                updatedAt = System.currentTimeMillis()
+            )
+        )
+    }
 }
 
 @Composable
@@ -270,9 +297,42 @@ fun HomeContentPreview() {
             updatedAt = System.currentTimeMillis()
         )
     )
-    HomeContent(featuredQuotes = dummyQuotes,
-        isLoading = false,
-        swipeCounter = 0,
-        onQuoteSwiped = {},
-        bottomNavigation = {})
+    ZestTheme {
+        HomeContent(
+            featuredQuotes = dummyQuotes,
+            isLoading = false,
+            swipeCounter = 0,
+            onQuoteSwiped = {},
+            bottomNavigation = {})
+    }
+}
+
+@Composable
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+fun HomeContentDarkPreview() {
+    val dummyQuotes = listOf(
+        Quote(
+            id = "1",
+            title = "Be yourself; everyone else is already taken.",
+            author = "Oscar Wilde",
+            isFeatured = false,
+            createdAt = System.currentTimeMillis(),
+            updatedAt = System.currentTimeMillis()
+        ), Quote(
+            id = "2",
+            title = "In the middle of every difficulty lies opportunity.",
+            author = "Albert Einstein",
+            isFeatured = false,
+            createdAt = System.currentTimeMillis(),
+            updatedAt = System.currentTimeMillis()
+        )
+    )
+    ZestTheme(darkTheme = true) {
+        HomeContent(
+            featuredQuotes = dummyQuotes,
+            isLoading = false,
+            swipeCounter = 0,
+            onQuoteSwiped = {},
+            bottomNavigation = {})
+    }
 }

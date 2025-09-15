@@ -1,17 +1,19 @@
 package com.zephysus.zest.component.navigation
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +23,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zephysus.zest.R
+import com.zephysus.zest.ui.theme.ZestTheme
 import com.zephysus.zest.ui.theme.blackBg2
+import com.zephysus.zest.ui.theme.borderDark
+import com.zephysus.zest.ui.theme.borderLight
+import com.zephysus.zest.ui.theme.whiteBg2
 
 @Composable
 fun ZestBottomNavigation(
@@ -45,16 +51,18 @@ fun ZestBottomNavigation(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
-                    .background(blackBg2)
+                    .background(if (isSystemInDarkTheme()) blackBg2 else whiteBg2)
                     .border(
-                        width = 1.dp, color = Color.White.copy(alpha = 0.1f), shape = CircleShape
+                        width = 1.dp,
+                        color = if (isSystemInDarkTheme()) borderDark else borderLight,
+                        shape = CircleShape
                     )
                     .clickable { onNavigateToSettings() }, contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_settings),
                     contentDescription = "Setting",
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -63,9 +71,11 @@ fun ZestBottomNavigation(
                 modifier = Modifier
                     .size(56.dp)
                     .clip(CircleShape)
-                    .background(blackBg2)
+                    .background(MaterialTheme.colorScheme.primary)
                     .border(
-                        width = 1.dp, color = Color.White.copy(alpha = 0.1f), shape = CircleShape
+                        width = 1.dp,
+                        color = if (isSystemInDarkTheme()) borderDark else borderLight,
+                        shape = CircleShape
                     )
                     .clickable { onNavigateToAddQuote() }, contentAlignment = Alignment.Center
             ) {
@@ -81,16 +91,18 @@ fun ZestBottomNavigation(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
-                    .background(blackBg2)
+                    .background(if (isSystemInDarkTheme()) blackBg2 else whiteBg2)
                     .border(
-                        width = 1.dp, color = Color.White.copy(alpha = 0.1f), shape = CircleShape
+                        width = 1.dp,
+                        color = if (isSystemInDarkTheme()) borderDark else borderLight,
+                        shape = CircleShape
                     )
                     .clickable { onNavigateToQuotes() }, contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_list),
                     contentDescription = "Quotes",
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -99,19 +111,33 @@ fun ZestBottomNavigation(
 }
 
 @Composable
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "Light Mode")
 fun ZestBottomNavigationPreview() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-    ) {
-        ZestBottomNavigation(
-            currentRoute = "home",
-            onNavigateToSettings = { },
-            onNavigateToAddQuote = { },
-            onNavigateToQuotes = { },
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
+    ZestTheme {
+        Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+            ZestBottomNavigation(
+                currentRoute = "home",
+                onNavigateToSettings = { },
+                onNavigateToAddQuote = { },
+                onNavigateToQuotes = { },
+            )
+        }
+    }
+}
+
+@Composable
+@Preview(showBackground = true, name = "Light Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+fun ZestBottomNavigationDarkPreview() {
+    ZestTheme(darkTheme = true) {
+        Box(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
+        ) {
+            ZestBottomNavigation(
+                currentRoute = "home",
+                onNavigateToSettings = { },
+                onNavigateToAddQuote = { },
+                onNavigateToQuotes = { },
+            )
+        }
     }
 }
