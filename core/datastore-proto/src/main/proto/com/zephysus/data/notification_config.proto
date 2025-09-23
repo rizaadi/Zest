@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.zephysus.data.local.datastore";
+option java_multiple_files = true;
+
+message NotificationConfigProto {
+  bool enabled = 1;
+  int64 interval_minutes = 2;
+  int64 last_notification_time = 3;
+
+}

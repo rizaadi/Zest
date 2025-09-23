@@ -2,7 +2,6 @@ package com.zephysus.zest.ui.screens.quotes
 
 import androidx.lifecycle.viewModelScope
 import com.zephysus.core.di.LocalRepository
-import com.zephysus.core.model.Quote
 import com.zephysus.core.repository.QuoteRepository
 import com.zephysus.zest.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,9 +1,9 @@
 package com.zephysus.core.di
 
 import com.zephysus.core.repository.LocalQuoteRepositoryImpl
-import com.zephysus.core.repository.NotificationPreferences
-import com.zephysus.core.repository.NotificationRepository
 import com.zephysus.core.repository.QuoteRepository
+import com.zephysus.core.repository.UserDataRepository
+import com.zephysus.core.repository.UserDataRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -20,9 +20,9 @@ interface RepositoryModule {
 
     @Binds
     @Singleton
-    fun bindNotificationRepository(
-        notificationPreferences: NotificationPreferences
-    ): NotificationRepository
+    fun bindsUserDataRepository(
+        userDataRepository: UserDataRepositoryImpl
+    ): UserDataRepository
 }
 
 @Qualifier

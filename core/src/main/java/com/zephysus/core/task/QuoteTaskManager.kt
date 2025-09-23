@@ -2,7 +2,7 @@ package com.zephysus.core.task
 
 import com.zephysus.core.model.QuoteTask
 import kotlinx.coroutines.flow.Flow
-import java.util.*
+import java.util.UUID
 import javax.inject.Singleton
 
 @Singleton
@@ -15,7 +15,7 @@ interface QuoteTaskManager {
     fun syncNotes(): UUID
 
     /**
-     * Schedules a [QuoteTask] task
+     * Schedules a [com.zephysus.core.model.QuoteTask] task
      *
      * @return Unique work ID
      */

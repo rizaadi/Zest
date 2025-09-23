@@ -3,6 +3,8 @@ package com.zephysus.zest.ui.screens.settings
 import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,8 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -33,18 +33,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.zephysus.core.model.DarkThemeConfig
 import com.zephysus.core.model.NotificationInterval
 import com.zephysus.core.model.NotificationSettings
 import com.zephysus.zest.component.ZestScaffold
 import com.zephysus.zest.component.ZestTopAppBar
 import com.zephysus.zest.ui.theme.ZestTheme
 import com.zephysus.zest.ui.theme.blackBg2
+import com.zephysus.zest.ui.theme.borderDark
+import com.zephysus.zest.ui.theme.borderLight
 import com.zephysus.zest.ui.theme.whiteBg2
 
 @Composable
@@ -72,6 +76,7 @@ fun SettingsScreen(
         state = state,
         onToggleNotifications = viewModel::toggleNotifications,
         onUpdateInterval = viewModel::updateNotificationInterval,
+        onUpdateAppearanceMode = viewModel::updateAppearanceMode,
         onDismissPermissionDialog = viewModel::dismissPermissionDialog,
         onDismissNoQuotesWarning = viewModel::dismissNoQuotesWarning,
         onRequestPermission = {
@@ -86,52 +91,60 @@ fun SettingsContent(
     state: SettingsState,
     onToggleNotifications: () -> Unit,
     onUpdateInterval: (NotificationInterval) -> Unit,
+    onUpdateAppearanceMode: (DarkThemeConfig) -> Unit,
     onDismissPermissionDialog: () -> Unit,
     onDismissNoQuotesWarning: () -> Unit,
     onRequestPermission: () -> Unit,
     onNavigateUp: () -> Unit
 ) {
-    ZestScaffold(zestTopAppBar = {
-        ZestTopAppBar(
-            title = "Settings", onNavigateUp = onNavigateUp
-        )
-    }, content = { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Top
-        ) {
-            SettingsCard {
+    ZestScaffold(
+        zestTopAppBar = {
+            ZestTopAppBar(
+                title = "Settings", onNavigateUp = onNavigateUp
+            )
+        },
+        content = { innerPadding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Top
+            ) {
+                SettingsCard {
+                    AppearanceSection(
+                        selectedMode = state.darkThemeConfig,
+                        onModeSelected = onUpdateAppearanceMode
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    NotificationSettingsSection(
+                        notificationSettings = state.notificationSettings,
+                        hasPermission = state.hasNotificationPermission,
+                        hasFeaturedQuotes = state.hasFeaturedQuotes,
+                        onToggleNotifications = onToggleNotifications,
+                        onUpdateInterval = onUpdateInterval
+                    )
+                }
 
-                NotificationSettingsSection(
-                    notificationSettings = state.notificationSettings,
-                    hasPermission = state.hasNotificationPermission,
-                    hasFeaturedQuotes = state.hasFeaturedQuotes,
-                    onToggleNotifications = onToggleNotifications,
-                    onUpdateInterval = onUpdateInterval
-                )
+                Spacer(modifier = Modifier.height(24.dp))
+
+                SettingsCard {
+                    Text(
+                        text = "About",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "App Version: ${state.appVersion}",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            SettingsCard {
-                Text(
-                    text = "About",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "App Version: ${state.appVersion}",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-    })
+        },
+    )
 
     // Permission Dialog
     if (state.showPermissionDialog) {
@@ -170,14 +183,60 @@ fun SettingsContent(
 }
 
 @Composable
+private fun AppearanceSection(
+    selectedMode: DarkThemeConfig, onModeSelected: (DarkThemeConfig) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "Appearance",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Box {
+            Button(onClick = { expanded = !expanded }) {
+                Row {
+                    Text(selectedMode.name)
+                }
+            }
+            DropdownMenu(
+                expanded = expanded, onDismissRequest = { expanded = false },
+            ) {
+                DarkThemeConfig.entries.forEach { mode ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(mode.name)
+                        },
+                        onClick = {
+                            onModeSelected(mode)
+                            expanded = false
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun SettingsCard(
     content: @Composable () -> Unit
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = if (isSystemInDarkTheme()) blackBg2 else whiteBg2),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .background(if (isSystemInDarkTheme()) blackBg2 else whiteBg2)
+            .border(
+                width = 1.dp,
+                color = if (isSystemInDarkTheme()) borderDark else borderLight,
+                shape = RoundedCornerShape(20.dp)
+            )
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
@@ -287,12 +346,17 @@ fun SettingsScreenPreview() {
     ZestTheme {
         SettingsContent(
             state = SettingsState(
+                darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
                 notificationSettings = NotificationSettings(
                     isEnabled = true, interval = NotificationInterval.THIRTY_MINUTES
-                ), hasNotificationPermission = true, hasFeaturedQuotes = true, appVersion = "1.0.0"
+                ),
+                hasNotificationPermission = true,
+                hasFeaturedQuotes = true,
+                appVersion = "1.0.0"
             ),
             onToggleNotifications = {},
             onUpdateInterval = {},
+            onUpdateAppearanceMode = {},
             onDismissPermissionDialog = {},
             onDismissNoQuotesWarning = {},
             onRequestPermission = {},

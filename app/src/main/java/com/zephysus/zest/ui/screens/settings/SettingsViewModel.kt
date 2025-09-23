@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.lifecycle.viewModelScope
 import com.zephysus.core.di.LocalRepository
+import com.zephysus.core.model.DarkThemeConfig
 import com.zephysus.core.model.NotificationInterval
-import com.zephysus.core.repository.NotificationRepository
 import com.zephysus.core.repository.QuoteRepository
+import com.zephysus.core.repository.UserDataRepository
 import com.zephysus.zest.notification.NotificationPermissionHelper
 import com.zephysus.zest.notification.QuoteNotificationManager
 import com.zephysus.zest.ui.BaseViewModel
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val notificationRepository: NotificationRepository,
+    private val userDataRepository: UserDataRepository,
     @LocalRepository private val quoteRepository: QuoteRepository,
     private val notificationManager: QuoteNotificationManager,
     private val permissionHelper: NotificationPermissionHelper
@@ -27,15 +28,18 @@ class SettingsViewModel @Inject constructor(
 ) {
 
     init {
-        observeNotificationSettings()
+        observeUserData()
         checkFeaturedQuotes()
     }
 
-    private fun observeNotificationSettings() {
-        notificationRepository.getNotificationSettings()
-            .onEach { settings ->
+    private fun observeUserData() {
+        userDataRepository.userData
+            .onEach { userData ->
                 setState {
-                    it.copy(notificationSettings = settings)
+                    it.copy(
+                        darkThemeConfig = userData.darkThemeConfig,
+                        notificationSettings = userData.notificationSettings
+                    )
                 }
             }
             .launchIn(viewModelScope)
@@ -88,7 +92,7 @@ class SettingsViewModel @Inject constructor(
             val currentSettings = state.value.notificationSettings
             val newSettings = currentSettings.copy(interval = interval)
 
-            notificationRepository.updateNotificationSettings(newSettings)
+            userDataRepository.updateNotificationSettings(newSettings)
 
             // Re-enable with new interval if notifications are currently enabled
             if (newSettings.isEnabled) {
@@ -122,5 +126,11 @@ class SettingsViewModel @Inject constructor(
 
     fun requestNotificationPermission(launcher: ManagedActivityResultLauncher<String, Boolean>) {
         permissionHelper.requestNotificationPermission(launcher)
+    }
+
+    fun updateAppearanceMode(mode: DarkThemeConfig) {
+        viewModelScope.launch {
+            userDataRepository.setDarkThemeConfig(mode)
+        }
     }
 }

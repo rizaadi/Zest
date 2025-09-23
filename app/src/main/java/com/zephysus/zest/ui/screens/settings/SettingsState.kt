@@ -1,10 +1,12 @@
 package com.zephysus.zest.ui.screens.settings
 
+import com.zephysus.core.model.DarkThemeConfig
 import com.zephysus.core.model.NotificationSettings
 import com.zephysus.zest.ui.State
 
+
 data class SettingsState(
-    val darkModeEnabled: Boolean = true,
+    val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
     val notificationSettings: NotificationSettings = NotificationSettings(),
     val hasNotificationPermission: Boolean = false,
     val hasFeaturedQuotes: Boolean = false,
