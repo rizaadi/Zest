@@ -6,7 +6,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,21 +26,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zephysus.core.model.Quote
-import com.zephysus.zest.R
+import com.zephysus.zest.R.drawable.quotation
 import com.zephysus.zest.component.ZestScaffold
 import com.zephysus.zest.component.ZestTopAppBar
 import com.zephysus.zest.ui.theme.InstrumentTypography
+import com.zephysus.zest.ui.theme.LocalZestBackgroundTheme
 import com.zephysus.zest.ui.theme.Typography
 import com.zephysus.zest.ui.theme.ZestTheme
-import com.zephysus.zest.ui.theme.blackBg2
-import com.zephysus.zest.ui.theme.borderDark
-import com.zephysus.zest.ui.theme.borderLight
-import com.zephysus.zest.ui.theme.whiteBg2
 
 @Composable
 fun QuotesScreen(
@@ -94,14 +92,15 @@ private fun QuoteCard(
     quote: Quote,
     onNavigateToDetailQuote: (String) -> Unit,
 ) {
+    val backgroundTheme = LocalZestBackgroundTheme.current
     Box(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(20.dp))
-            .background(if (isSystemInDarkTheme()) blackBg2 else whiteBg2)
+            .background(backgroundTheme.color)
             .border(
                 width = 1.dp,
-                color = if (isSystemInDarkTheme()) borderDark else borderLight,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.12f),
                 shape = RoundedCornerShape(20.dp)
             )
             .fillMaxWidth()
@@ -109,9 +108,8 @@ private fun QuoteCard(
                 onNavigateToDetailQuote(quote.id)
             }) {
         Image(
-            painter = if (isSystemInDarkTheme()) painterResource(R.drawable.quotation) else painterResource(
-                R.drawable.quotation_dark
-            ),
+            imageVector = ImageVector.vectorResource(quotation),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -125,9 +123,8 @@ private fun QuoteCard(
                     .align(Alignment.TopEnd)
                     .padding(top = 12.dp, end = 12.dp)
                     .background(
-                        color = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.05f) else Color.Black.copy(
-                            alpha = 0.05f
-                        ), shape = RoundedCornerShape(8.dp)
+                        color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.3f),
+                        shape = RoundedCornerShape(8.dp)
                     )
                     .padding(horizontal = 6.dp, vertical = 2.dp)
             ) {

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Zest</string>
+
+    <!-- Theme Configuration -->
+    <string name="theme_follow_system">Follow System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
 </resources>

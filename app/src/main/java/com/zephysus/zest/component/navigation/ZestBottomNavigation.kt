@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -23,11 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.zephysus.zest.R
+import com.zephysus.zest.ui.theme.LocalZestBackgroundTheme
 import com.zephysus.zest.ui.theme.ZestTheme
-import com.zephysus.zest.ui.theme.blackBg2
-import com.zephysus.zest.ui.theme.borderDark
-import com.zephysus.zest.ui.theme.borderLight
-import com.zephysus.zest.ui.theme.whiteBg2
 
 @Composable
 fun ZestBottomNavigation(
@@ -37,6 +33,8 @@ fun ZestBottomNavigation(
     onNavigateToQuotes: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val backgroundTheme = LocalZestBackgroundTheme.current
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -51,10 +49,10 @@ fun ZestBottomNavigation(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
-                    .background(if (isSystemInDarkTheme()) blackBg2 else whiteBg2)
+                    .background(backgroundTheme.color)
                     .border(
                         width = 1.dp,
-                        color = if (isSystemInDarkTheme()) borderDark else borderLight,
+                        color = MaterialTheme.colorScheme.outline,
                         shape = CircleShape
                     )
                     .clickable { onNavigateToSettings() }, contentAlignment = Alignment.Center
@@ -74,7 +72,7 @@ fun ZestBottomNavigation(
                     .background(MaterialTheme.colorScheme.primary)
                     .border(
                         width = 1.dp,
-                        color = if (isSystemInDarkTheme()) borderDark else borderLight,
+                        color = MaterialTheme.colorScheme.outline,
                         shape = CircleShape
                     )
                     .clickable { onNavigateToAddQuote() }, contentAlignment = Alignment.Center
@@ -91,10 +89,10 @@ fun ZestBottomNavigation(
                 modifier = Modifier
                     .size(36.dp)
                     .clip(CircleShape)
-                    .background(if (isSystemInDarkTheme()) blackBg2 else whiteBg2)
+                    .background(backgroundTheme.color)
                     .border(
                         width = 1.dp,
-                        color = if (isSystemInDarkTheme()) borderDark else borderLight,
+                        color = MaterialTheme.colorScheme.outline,
                         shape = CircleShape
                     )
                     .clickable { onNavigateToQuotes() }, contentAlignment = Alignment.Center

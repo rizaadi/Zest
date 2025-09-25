@@ -5,6 +5,37 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
+
+/**
+ * A class to model background colors for Zest app.
+ */
+@Immutable
+data class ZestBackgroundTheme(
+    val color: Color = Color.Unspecified,
+)
+
+/**
+ * A composition local for [ZestBackgroundTheme].
+ */
+val LocalZestBackgroundTheme = staticCompositionLocalOf { ZestBackgroundTheme() }
+
+/**
+ * Light background theme
+ */
+val LightZestBackgroundTheme = ZestBackgroundTheme(
+    color = whiteBg2,
+)
+
+/**
+ * Dark background theme
+ */
+val DarkZestBackgroundTheme = ZestBackgroundTheme(
+    color = blackBg2,
+)
 
 private val DarkColorScheme = darkColorScheme(
     primary = Teal500,
@@ -126,7 +157,18 @@ fun ZestTheme(
         else -> LightColorScheme
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme, typography = Typography, content = content
-    )
+    val backgroundTheme = when {
+        darkTheme -> DarkZestBackgroundTheme
+        else -> LightZestBackgroundTheme
+    }
+
+    CompositionLocalProvider(
+        LocalZestBackgroundTheme provides backgroundTheme,
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content
+        )
+    }
 }

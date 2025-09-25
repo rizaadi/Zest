@@ -5,7 +5,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,13 +43,20 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.zephysus.core.model.DarkThemeConfig
 import com.zephysus.core.model.NotificationInterval
 import com.zephysus.core.model.NotificationSettings
+import com.zephysus.zest.R
 import com.zephysus.zest.component.ZestScaffold
 import com.zephysus.zest.component.ZestTopAppBar
+import com.zephysus.zest.ui.theme.LocalZestBackgroundTheme
 import com.zephysus.zest.ui.theme.ZestTheme
-import com.zephysus.zest.ui.theme.blackBg2
-import com.zephysus.zest.ui.theme.borderDark
-import com.zephysus.zest.ui.theme.borderLight
-import com.zephysus.zest.ui.theme.whiteBg2
+
+@Composable
+private fun DarkThemeConfig.getDisplayName(): String {
+    return when (this) {
+        DarkThemeConfig.FOLLOW_SYSTEM -> stringResource(R.string.theme_follow_system)
+        DarkThemeConfig.LIGHT -> stringResource(R.string.theme_light)
+        DarkThemeConfig.DARK -> stringResource(R.string.theme_dark)
+    }
+}
 
 @Composable
 fun SettingsScreen(
@@ -201,7 +208,7 @@ private fun AppearanceSection(
         Box {
             Button(onClick = { expanded = !expanded }) {
                 Row {
-                    Text(selectedMode.name)
+                    Text(selectedMode.getDisplayName())
                 }
             }
             DropdownMenu(
@@ -210,7 +217,7 @@ private fun AppearanceSection(
                 DarkThemeConfig.entries.forEach { mode ->
                     DropdownMenuItem(
                         text = {
-                            Text(mode.name)
+                            Text(mode.getDisplayName())
                         },
                         onClick = {
                             onModeSelected(mode)
@@ -227,14 +234,15 @@ private fun AppearanceSection(
 private fun SettingsCard(
     content: @Composable () -> Unit
 ) {
+    val backgroundTheme = LocalZestBackgroundTheme.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
-            .background(if (isSystemInDarkTheme()) blackBg2 else whiteBg2)
+            .background(backgroundTheme.color)
             .border(
                 width = 1.dp,
-                color = if (isSystemInDarkTheme()) borderDark else borderLight,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.12f),
                 shape = RoundedCornerShape(20.dp)
             )
     ) {
